@@ -1,6 +1,22 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {open, add, backward, remove} from "./folderSlice";
+import { add, remove} from "./folderSlice";
+import { adding, removing} from "../path/pathSlice";
+
+
+
+
+export const FolderView = () => {
+    const structureOfFolder = useSelector((state) => state.folder.structureOfFolder)
+    const folderPath = useSelector((state) =>state.path.folderPath)
+    const dispatch = useDispatch()
+    const folderNameState = useSelector((state) => state.folderName.folderNameState)
+    console.log(structureOfFolder)
+     return (
+            <div><ul>{pathDisplay(folderPath,structureOfFolder,dispatch,folderNameState)}</ul></div>
+        
+    )
+} 
 
 function positionIndex(base,structure){
     for(let i =0;i<structure.length;i++){
@@ -10,7 +26,7 @@ function positionIndex(base,structure){
     }
 }
 
- function pathDisplay(path,structure) {
+ function pathDisplay(path,structure,dispatch,folderNameState) {
     var isIncluded = path.includes("/")
     var base,remBase,baseIndex
     //console.log(path)
@@ -19,35 +35,14 @@ function positionIndex(base,structure){
      base = path.slice(0,path.indexOf("/"))
      remBase = path.slice(path.indexOf("/")+1,path.length)
      baseIndex = positionIndex(base,structure)
-     pathDisplay(remBase,structure[baseIndex].children)
+     return(pathDisplay(remBase,structure[baseIndex].children))
     // console.log(baseIndex)
     }else{
         base = path
         remBase = "" 
         baseIndex = positionIndex(base,structure)
-        console.log(structure[baseIndex].children.map(bElement => bElement.name))
-        return(structure[baseIndex].children.map(bElement => bElement.name))   
+        //console.log(structure[baseIndex].children.map(bElement => bElement.name))
+        const mapArray = (structure[baseIndex].children.map(bElement => bElement.name))  
+       return mapArray.map((element,index) => <li onClick={(e) => dispatch(adding(e.target.value))} key={index}>{element}</li>) 
     }
-
-
-    
 }
-
-
-export const FolderView = () => {
-    const structureOfFolder = useSelector((state) => state.folder.structureOfFolder)
-    const folderPath = useSelector((state) =>state.path.folderPath)
-    const dispatch = useDispatch()
-    console.log(folderPath)
-    //console.log(structureOfFolder)
-
-     pathDisplay(folderPath,structureOfFolder)
-     console.log(pathDisplay(folderPath,structureOfFolder))
-
-    
-    return (
-        <div>
-           
-        </div>
-    )
-} 

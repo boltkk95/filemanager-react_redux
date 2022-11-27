@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 
 const initialState = {
-  folderPath: "c"
+  folderPath: "c/me"
 }
 
 const pathSlice = createSlice({
@@ -15,9 +15,6 @@ const pathSlice = createSlice({
     removing: (state) => {
         state.folderPath = state.folderPath.slice(0, state.folderPath.lastIndexOf("/"))
     },
-    location: (state,action) => {
-      
-    }
   }
 })
 

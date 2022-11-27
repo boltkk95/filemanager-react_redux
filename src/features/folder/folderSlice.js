@@ -12,9 +12,17 @@ const initialState = {
             {
               name:"you",
               children:[]
+            },
+            {
+              name:"hd",
+              children:[]
             }
                                 
           ]
+        },
+        {
+          name:"new",
+          children:[]
         }
       ]
     }
@@ -29,20 +37,16 @@ const folderSlice = createSlice({
   name: 'folder',
   initialState,
   reducers: {
-    open: state => {
-      
-    },
-    backward: state => {
 
-    },
     remove: (state, action) => {
 
     },
     add: (state, action) => {
-        state.stuctureOfFolder = [...state.stuctureOfFolder,]
+        
+        state.stuctureOfFolder = action.payload
     },
   }
 })
 
 export default folderSlice.reducer
-export const { open, add, backward, remove} = folderSlice.actions
+export const { add,remove} = folderSlice.actions
