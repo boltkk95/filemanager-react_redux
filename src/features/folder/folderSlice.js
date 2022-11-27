@@ -5,48 +5,20 @@ const initialState = {
   structureOfFolder: [
     {
       name:"c",
-      children:[
-        {
-          name:"me",
-          children:[
-            {
-              name:"you",
-              children:[]
-            },
-            {
-              name:"hd",
-              children:[]
-            }
-                                
-          ]
-        },
-        {
-          name:"new",
-          children:[]
-        }
-      ]
-    }
-  ]
-}
+      children:[]
+}]}
 
-/*{name:"c",
-                      children:[{name:"me",
-                                children:[{}]}]}*/
 
 const folderSlice = createSlice({
   name: 'folder',
   initialState,
   reducers: {
-
-    remove: (state, action) => {
-
-    },
-    add: (state, action) => {
+    edit: (state, action) => {
         
-        state.stuctureOfFolder = action.payload
+        state.structureOfFolder = action.payload
     },
   }
 })
 
 export default folderSlice.reducer
-export const { add,remove} = folderSlice.actions
+export const { edit} = folderSlice.actions

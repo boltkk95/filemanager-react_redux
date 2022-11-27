@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {hide} from "./modalSlice";
-import { add} from "../folder/folderSlice";
+import { edit} from "../folder/folderSlice";
 import {handleNameChange} from "../folderName/folderNameSlice"
 
 export const ModalView = () => {
@@ -16,10 +16,10 @@ export const ModalView = () => {
           { modalState && 
           <div><form onSubmit={handleSubmit}>
                 <textarea placeholder="folder name" value={folderNameState} onChange={(e) => dispatch(handleNameChange(e.target.value))} />
-                <input type="submit" value="create" disabled={!folderNameState} onClick={() => dispatch(add(pathDisplay1(folderPath,structureOfFolder,folderNameState)))} />
+                <input type="submit" value="create" disabled={!folderNameState} onClick={() =>{dispatch(edit(pathDisplay1(folderPath,structureOfFolder,folderNameState)));dispatch(hide())}} />
                 </form>
                 <button onClick={() => {dispatch(hide())
-                                        //dispatch(handleNameChange(""))
+                                        dispatch(handleNameChange(""))
                                         }
                                 }>cancel</button>
             </div>
@@ -31,8 +31,6 @@ export const ModalView = () => {
 const handleSubmit = event => {
 
     event.preventDefault();
-
-    console.log('form submitted ✅');
   };
 
 function positionIndex(base,structure){
@@ -45,34 +43,42 @@ function positionIndex(base,structure){
 
  function pathDisplay1(path,structure,folderNameState) {
     var isIncluded = path.includes("/")
-    var base,remBase,baseIndex,indexArray=[]
+    var base,remBase,baseIndex
 
 
-    if (isIncluded===true){
+    if (isIncluded){
      base = path.slice(0,path.indexOf("/"))
      remBase = path.slice(path.indexOf("/")+1,path.length)
      baseIndex = positionIndex(base,structure)
-     indexArray.push(baseIndex)
      let {children, ...r4} = structure[baseIndex]
      let r5 = {...r4,children:pathDisplay1(remBase,structure[baseIndex].children,folderNameState)}
-    var newArray1 = structure.filter( (el) => el.name != r5.name)
+    var newArray1 = structure.filter( (el) => el.name !== r5.name)
     var rarray1 = [...newArray1,r5]
         return(rarray1)
 
     }else{
         base = path
         remBase = "" 
-        const c = structure //rectify using c with structure
         baseIndex = positionIndex(base,structure)
-        indexArray.push(baseIndex)
+        let checkArray = structure[baseIndex].children.map((el) => el.name)
+
+        if(checkArray.includes(folderNameState)){
+           return structure
+        }
+
+        else{
+        base = path
+        remBase = "" 
+        baseIndex = positionIndex(base,structure)
         const a = {name:`${folderNameState}`,children:[]}
         const b = structure[baseIndex]
         const modobj = {...b,children: b.children.concat([a])}
-        let {children, ...r1} = c[baseIndex]
+        let {children, ...r1} = structure[baseIndex]
         let r2 = {...r1,children:modobj.children}
-        var newArray = structure.filter( (el) => el.name != r2.name)
+        var newArray = structure.filter( (el) => el.name !== r2.name)
         var rarray = [...newArray,r2]
         return rarray
+        }
         
     }
 }
