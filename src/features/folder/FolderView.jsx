@@ -10,7 +10,6 @@ export const FolderView = () => {
     const structureOfFolder = useSelector((state) => state.folder.structureOfFolder)
     const folderPath = useSelector((state) =>state.path.folderPath)
     const dispatch = useDispatch()
-    const folderNameState = useSelector((state) => state.folderName.folderNameState)
 
     function pathDisplay(path,structure) {
         var isIncluded = path.includes("/")
